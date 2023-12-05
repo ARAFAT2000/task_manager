@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:task_manager/ui/screen/setpasswordscreen.dart';
 import 'package:task_manager/ui/widget/body_background.dart';
-
 import 'login_screen.dart';
 
 class PinVarificationScreen extends StatefulWidget {
