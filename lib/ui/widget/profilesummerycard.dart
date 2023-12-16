@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,26 @@ final bool enableTap;
 
 class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
 
-  Uint8List imageBytes =  Base64Decoder().convert(AuthController.user?.photo?? '');
+
+  Widget _buildUserImage(String? imageBytes) {
+    try {
+      if (imageBytes != null) {
+        Uint8List imageBytess = const Base64Decoder().convert(imageBytes.replaceAll('data:image/png;base64,',''));
+        return Image.memory(
+          imageBytess,
+          height: 50,
+          width: 50,
+          fit: BoxFit.cover,
+        );
+      }
+    } catch (e) {
+      log('Error loading user image: $e');
+    }
+    // Return a default image or placeholder if an error occurs
+    return const CircleAvatar(
+      child: Icon(Icons.error),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +59,8 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
             ClipRRect(
                 borderRadius: BorderRadius.circular(40),
 
-                child: Image.memory(imageBytes,fit:BoxFit.cover,))
+                child:_buildUserImage(AuthController.user?.photo?? '')),
+
       ),
       title: Text(fullName,style: TextStyle(color: Colors.white),),
       subtitle: Text(email,style: TextStyle(color: Colors.white)),

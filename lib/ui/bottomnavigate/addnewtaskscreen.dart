@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:task_manager/Data_caller/Utility/url_all.dart';
 import 'package:task_manager/Data_caller/network_caller.dart';
 import 'package:task_manager/Data_caller/network_response.dart';
@@ -68,7 +70,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                           replacement: Center(
                             child: CircularProgressIndicator(),
                           ),
-                          child: ElevatedButton(onPressed: CreateTask ,
+                          child: ElevatedButton(
+                              onPressed: (){
+                                Get.to(CreateTask());
+                              },
                               child: Icon(Icons.arrow_circle_right_outlined)),
                         )
                     ,
@@ -105,10 +110,10 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       _descriptionTEController.clear();
       _subjectTEController.clear();
       if(mounted){
-        ShowsnackMessege(context, 'New Task Added ');
+        Get.snackbar('New task' ,'Added succesfully');
       }
     }else{
-      ShowsnackMessege(context, 'Failed? Try again ');
+      Get.snackbar('Wrong !','Please try again');
     }
   }
 

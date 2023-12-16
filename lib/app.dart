@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/ui/bottomnavigate/editprofile_screen.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-import 'package:task_manager/ui/screen/signup_screen.dart';
 import 'package:task_manager/ui/screen/splass_screen.dart';
 
 
@@ -11,10 +10,11 @@ class TodoManagerApp extends StatelessWidget {
  static GlobalKey<NavigatorState> navigationKey= GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplassScreen(),
       theme: ThemeData(
+        useMaterial3: false,
         inputDecorationTheme: InputDecorationTheme(
             fillColor: Colors.white,
             filled: true,

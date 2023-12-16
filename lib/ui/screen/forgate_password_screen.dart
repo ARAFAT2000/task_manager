@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/ui/screen/pinvarificationscreen.dart';
 import 'package:task_manager/ui/screen/signup_screen.dart';
 import 'package:task_manager/ui/widget/body_background.dart';
@@ -40,8 +41,7 @@ class _ForgatePasswordScreenState extends State<ForgatePasswordScreen> {
 
                         width: double.infinity,
                         child: ElevatedButton(onPressed: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context)=>PinVarificationScreen()));
+                         Get.to(PinVarificationScreen());
                         },
                             child: Icon(Icons.arrow_circle_right_outlined)),
                       ),
@@ -58,8 +58,7 @@ class _ForgatePasswordScreenState extends State<ForgatePasswordScreen> {
 
                           ),),
                           TextButton(onPressed: (){
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context)=>SignUpScreen()));
+                            Get.to(SignUpScreen());
                           },
                               child: Text('Sign In')),
                         ],

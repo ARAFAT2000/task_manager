@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:task_manager/Data_caller/network_caller.dart';
 import 'package:task_manager/Data_caller/network_response.dart';
@@ -30,16 +32,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool updateProfileProgress= false;
   XFile? photo;
 
-
-
- // GlobalKey<FormState> _globalKey= GlobalKey<FormState>();
-
   @override
   void initState() {
-    emailController.text = AuthController.user!.email??'';
-    firstnameController.text = AuthController.user!.firstName??'';
-    lastnameController.text = AuthController.user!.lastName??'';
-    mobileController.text = AuthController.user!.mobile??'';
+    emailController.text = AuthController.user?.email??'';
+    firstnameController.text = AuthController.user?.firstName??'';
+    lastnameController.text = AuthController.user?.lastName??'';
+    mobileController.text = AuthController.user?.mobile??'';
     super.initState();
   }
   @override
@@ -92,6 +90,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                      onTap: ()async{
                                   final XFile?
                                   images = await ImagePicker().pickImage(source: ImageSource.camera,imageQuality: 50);
+                                  print(images?.name);
                                     if(images!= null){
                                       photo= images;
                                       if(mounted){
@@ -123,11 +122,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                  decoration: InputDecoration(
                                      hintText: 'Email'
                                  ),
-                                 // validator: (String ? value){
-                                 //   if(value?.isEmpty?? true){
-                                 //     return 'Enter email';
-                                 //   } return null;
-                                 // },
+                               
                                ),
                                SizedBox(height: 8,),
                                TextFormField(
@@ -171,7 +166,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: Visibility(
                             visible: updateProfileProgress== false,
                             replacement: Center(child: CircularProgressIndicator(),),
-                            child: ElevatedButton(onPressed: ProfileUpdate,
+                            child: ElevatedButton(
+                                onPressed:(){
+                                  Get.to(ProfileUpdate());
+                                },
                                 child: Icon(Icons.arrow_circle_right_outlined)),
                           )
                           ,
@@ -198,28 +196,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       "firstName":firstnameController.text.trim(),
       "lastName":lastnameController.text.trim(),
       "mobile":mobileController.text.trim(),
+     // "photo":photoInBase64??''
     };
     if(passwordController.text.isEmpty){
       inputData['password']= passwordController.text;
     }
 
-    try {
-      if (photo != null) {
-        List<int> imagesBytes = await photo!.readAsBytes();
-        String photoInBase64 = base64Encode(imagesBytes);
-
-        // Remove the first 23 characters
-        if (photoInBase64.length > 23) {
-          photoInBase64 = photoInBase64.substring(23);
-        } else {
-
-          print('please cheack');
-        }
-
-        inputData['photo'] = photoInBase64;
-      }
-    } catch (e) {
-      print(e.toString());
+    if (photo != null) {
+      List<int> imagesBytes = await photo!.readAsBytes();
+       photoInBase64 = base64Encode(imagesBytes);
+      inputData['photo'] = photoInBase64;
     }
 
 
@@ -232,19 +218,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
     }
     if(response.isSuccess){
-      AuthController.user= UserModel(
+     await AuthController.updateUserInformation(UserModel(
           email: emailController.text.trim(),
           firstName: firstnameController.text.trim(),
           lastName: lastnameController.text.trim(),
         mobile: mobileController.text.trim(),
-          photo:  photoInBase64?? AuthController.user?.photo
-      );
+          photo:  photoInBase64?? AuthController.user?.photo?? ''
+      ));
 
-      ShowsnackMessege(context, 'Profil Update Succesfully');
+     Get.snackbar('Progile !','Update Succesfully');
     }
 
     else{
-      ShowsnackMessege(context, 'Update Failed');
+      Get.snackbar('Update !','Failed');
     }
 
   }

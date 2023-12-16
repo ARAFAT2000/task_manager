@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/Data_caller/network_caller.dart';
 import 'package:task_manager/Model/user_model.dart';
@@ -22,7 +23,7 @@ class _LogInScreenState extends State<LogInScreen> {
  final TextEditingController _emailController = TextEditingController();
  final TextEditingController _passwordController = TextEditingController();
   GlobalKey<FormState> _globalKey =GlobalKey<FormState>();
-  bool _logInprosses = false;
+  RxBool _logInprosses = false.obs;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +114,7 @@ class _LogInScreenState extends State<LogInScreen> {
     if(!_globalKey.currentState!.validate()){
       return null;
     }
-    _logInprosses =true;
+    _logInprosses =true.obs;
     if(mounted){
       setState(() {
       });
@@ -124,7 +125,7 @@ class _LogInScreenState extends State<LogInScreen> {
           "password": _passwordController.text,
 
         },isLogIn: true );
-    _logInprosses = false;
+    _logInprosses = false.obs;
     if(mounted){
       setState(() {
       });
@@ -134,8 +135,7 @@ class _LogInScreenState extends State<LogInScreen> {
           UserModel.fromJson(response.jsonResponse['data']));
 
       if(mounted){
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context)=> ButtomNavigator ()));
+      Get.to(ButtomNavigator());
       }
     }else{
       if(response.stutusCode == 401){
